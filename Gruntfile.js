@@ -120,7 +120,7 @@ module.exports = function(grunt) {
     nodemon.stdout.pipe(process.stdout);
     nodemon.stderr.pipe(process.stderr);*/
 
-    grunt.task.run([ 'watch' ]);
+    grunt.task.run([ 'shell:server-dev','watch' ]);
   });
 
   ////////////////////////////////////////////////////
@@ -136,23 +136,19 @@ module.exports = function(grunt) {
     'uglify'
   ]);
 
-  grunt.registerTask('upload', function(n) {
-  });
-
   grunt.registerTask('deploy', function(n){
-    grunt.task.run([
-        'test',
-        'build',
-        'jshint'
-    ])
     if(grunt.option('prod')) {
       grunt.task.run([
-        'shell'
+        'test',
+        'jshint',
+        'shell:prod'
       ])
     } else {
       grunt.task.run([
-        'shell'
-        // 'server-dev'
+        'test',
+        'build',
+        'jshint',
+        'server-dev'
       ]);
     }
     // add your deploy tasks here
