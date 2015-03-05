@@ -61,6 +61,9 @@ module.exports = function(grunt) {
     },
 
     watch: {
+      options: {
+        livereload: true
+      },
       scripts: {
         files: [
           'public/client/**/*.js',
@@ -87,7 +90,10 @@ module.exports = function(grunt) {
           'git push azure master',
           'azure site scale mode free shortly-artur'
         ].join('&&')
-    }
+      },
+      'server-dev': {
+        command: './env.sh'
+      }
     },
   });
 
@@ -130,15 +136,19 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', function(n){
-    if(grunt.option('prod')) {
-      grunt.task.run([
+    grunt.task.run([
         'test',
         'build',
-        'jshint',
+        'jshint'
+    ])
+    if(grunt.option('prod')) {
+      grunt.task.run([
         'shell'
       ])
     } else {
-      grunt.task.run([ 'server-dev' ]);
+      grunt.task.run([
+        'server-dev'
+      ]);
     }
     // add your deploy tasks here
   });
