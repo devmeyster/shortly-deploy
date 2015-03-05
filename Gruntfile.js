@@ -21,18 +21,29 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      my_target: {
+        files: {
+          'public/dist/app.min.js': ['public/client/*.js', 'public/lib/*.js']
+        }
+      }
     },
 
     jshint: {
       files: [
         // Add filespec list here
+        './*.js',
+        'public/client/*.js',
+        'app/*.js',
+        'app/**/*.js',
+        'lib/*.js'
       ],
       options: {
         force: 'true',
         jshintrc: '.jshintrc',
         ignores: [
           'public/lib/**/*.js',
-          'public/dist/**/*.js'
+          'public/dist/**/*.js',
+          'node_modules/**'
         ]
       }
     },
@@ -97,16 +108,17 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('upload', function(n) {
+  });
+
+  grunt.registerTask('deploy', function(n){
     if(grunt.option('prod')) {
+
       // add your production server task here
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
-  });
-
-  grunt.registerTask('deploy', [
     // add your deploy tasks here
-  ]);
+  });
 
 
 };
