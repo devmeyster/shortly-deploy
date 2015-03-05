@@ -27,11 +27,13 @@ module.exports = function(grunt) {
       my_target: {
         files: {
           'public/dist/app.min.js': [
+            'public/client/*.js'
+          ],
+          'public/dist/vendor.min.js':[
             'public/lib/jquery.js',
             'public/lib/underscore.js',
             'public/lib/backbone.js',
             'public/lib/handlebars.js',
-            'public/client/*.js'
           ]
         }
       }
@@ -92,7 +94,9 @@ module.exports = function(grunt) {
         ].join('&&')
       },
       'server-dev': {
-        command: './env.sh'
+        command: [
+          './dev-env.sh',
+        ].join('&&'),
       }
     },
   });
@@ -108,13 +112,13 @@ module.exports = function(grunt) {
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
-    var nodemon = grunt.util.spawn({
+    /*var nodemon = grunt.util.spawn({
          cmd: 'grunt',
          grunt: true,
          args: 'nodemon'
     });
     nodemon.stdout.pipe(process.stdout);
-    nodemon.stderr.pipe(process.stderr);
+    nodemon.stderr.pipe(process.stderr);*/
 
     grunt.task.run([ 'watch' ]);
   });
@@ -147,7 +151,8 @@ module.exports = function(grunt) {
       ])
     } else {
       grunt.task.run([
-        'server-dev'
+        'shell'
+        // 'server-dev'
       ]);
     }
     // add your deploy tasks here
