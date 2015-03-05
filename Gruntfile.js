@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     uglify: {
       my_target: {
         files: {
-          'public/dist/app.min.js': ['public/client/*.js', 'public/lib/*.js']
+          'public/dist/app.min.js': ['public/lib/*.js', 'public/client/*.js']
         }
       }
     },
@@ -69,8 +69,16 @@ module.exports = function(grunt) {
     },
 
     shell: {
-      prodServer: {
-      }
+      options: {
+        stdout: true
+      },
+      prod: {
+        command: [
+          'azure site scale mode standard shortly-artur',
+          'git push azure master',
+          'azure site scale mode free shortly-artur'
+        ].join('&&')
+    }
     },
   });
 
@@ -105,6 +113,8 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'jshint',
+    'uglify'
   ]);
 
   grunt.registerTask('upload', function(n) {
@@ -112,8 +122,12 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', function(n){
     if(grunt.option('prod')) {
-
-      // add your production server task here
+      grunt.task.run([
+        'test',
+        'build',
+        'jshint',
+        'shell'
+      ])
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
