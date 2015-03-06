@@ -1,6 +1,18 @@
-var Bookshelf = require('bookshelf');
 var path = require('path');
+var mongoose = require('mongoose');
 
+var mongoUser = process.env.db_user || 'shortlydev';
+var mongoPass = process.env.db_pass || '12345';
+
+var opts = {server: {auto_reconnect: true}, user: mongoUser, pass: mongoPass };
+var db = mongoose.createConnection('localhost', 'shortly', 27017, opts);
+
+db.on('error', console.error.bind(console, 'connection error: '));
+db.once('open', function (callback) {
+  console.log("db connection established...")
+});
+
+/*
 var db = Bookshelf.initialize({
   client: 'sqlite3',
   connection: {
@@ -41,5 +53,7 @@ db.knex.schema.hasTable('users').then(function(exists) {
     });
   }
 });
+
+*/
 
 module.exports = db;
